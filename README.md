@@ -10,6 +10,8 @@
 
 ## Running
 
+In the project directory, run:
+
 ```bash
 composer install
 ```
@@ -19,4 +21,5 @@ Then run these commands:
 
 ```bash
 php bin/console doctrine:migrations:migrate
+php bin/console doctrine:fixtures:load
 ```

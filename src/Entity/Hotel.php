@@ -54,7 +54,7 @@ class Hotel
     private $openinghours;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="itemreviewed")
+     * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="itemreviewed",cascade={"persist"})
      */
     private $reviews;
 
