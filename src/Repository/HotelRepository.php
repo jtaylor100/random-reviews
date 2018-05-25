@@ -1,8 +1,10 @@
 <?php
 
+
 namespace App\Repository;
 
 use App\Entity\Hotel;
+use App\Entity\Review;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,6 +19,24 @@ class HotelRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Hotel::class);
+    }
+
+    /*
+     * Returns a random review belonging to the given hotel
+     *
+     * Current implementation may not scale well
+     * See: http://jan.kneschke.de/projects/mysql/order-by-rand/
+     *      https://github.com/doctrine/doctrine2/issues/5479#issuecomment-230503415
+     */
+    public function getRandomReview(Hotel $hotel) : ?Review
+    {
+        // Select all Review Ids belonging to Hotel
+        $reviews = $hotel->getReviews();
+        $reviewCount = count($reviews); 
+        $randomIndex = mt_rand(0,$reviewCount-1);
+        $randomReview = $reviews[$randomIndex];
+
+        return $randomReview;
     }
 
 //    /**

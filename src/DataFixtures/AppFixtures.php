@@ -7,7 +7,6 @@ use App\Entity\Review;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use joshtronic\LoremIpsum;
 
 class AppFixtures extends Fixture 
 {
@@ -26,6 +25,7 @@ class AppFixtures extends Fixture
     private function generateHotelWithReviews(string $name, string $address1, string $postcode,string $city,bool $petsAllowed,string $openingHours) : Hotel
     {
 
+
         $hotel = new Hotel();
         $hotel->setName($name);
         $hotel->setAddressline1($address1);
@@ -34,15 +34,15 @@ class AppFixtures extends Fixture
         $hotel->setPetsAllowed($petsAllowed);
         $hotel->SetOpeninghours($openingHours);
 
-        $loremIpsum = new LoremIpsum();
+        $faker = \Faker\Factory::create();
 
         for($i = 0; $i < 20; $i++)
         {
             $review = new Review();
-            $review->setReviewbody($loremIpsum->sentence());
+            $review->setReviewbody($faker->text);
             $review->setReviewrating(mt_rand(1,10));
-            $review->setAuthorname($loremIpsum->words(2));
-            $review->setDatepublished(new \DateTime());
+            $review->setAuthorname($faker->name);
+            $review->setDatepublished($faker->dateTime());
             $hotel->addReview($review);
         }
 

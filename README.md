@@ -22,4 +22,7 @@ Then run these commands:
 ```bash
 php bin/console doctrine:migrations:migrate
 php bin/console doctrine:fixtures:load
+php bin/console server:run
 ```
+
+Then go to `localhost:8000/{hotelId}/today/review` to view a random review for the given `hotelId`.
