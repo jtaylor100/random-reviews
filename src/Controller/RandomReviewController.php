@@ -6,13 +6,15 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use App\Entity\Hotel;
+use App\Service\CachedReviewFetcher;
 
 class RandomReviewController extends Controller
 {
+
     /**
      * @Route("/{hotelId}/today/review", name="random_review")
      */
-    public function index($hotelId)
+    public function index($hotelId, CachedReviewFetcher $cachedReviewFetcher)
     {
         $hotelRepo = $this->getDoctrine()
             ->getRepository(Hotel::Class);
@@ -27,7 +29,7 @@ class RandomReviewController extends Controller
         }
         
         // Choose random review out of review set
-        $review = $hotelRepo->getRandomReview($hotel);
+        $review = $cachedReviewFetcher->getRandomReview($hotel);
 
         // Render chosen review
         return $this->render('random_review/index.html.twig', [

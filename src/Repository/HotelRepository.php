@@ -8,7 +8,6 @@ use App\Entity\Review;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
  * @method Hotel|null find($id, $lockMode = null, $lockVersion = null)
@@ -24,7 +23,7 @@ class HotelRepository extends ServiceEntityRepository
     }
 
     /*
-     * Returns a random review belonging to the given hotel
+     * Returns a random review belonging to the given hotel.
      *
      * Current implementation may not scale well
      * See: http://jan.kneschke.de/projects/mysql/order-by-rand/
@@ -32,21 +31,11 @@ class HotelRepository extends ServiceEntityRepository
      */
     public function getRandomReview(Hotel $hotel) : ?Review
     {
-        $cache = new FilesystemAdapter();
-        $randomReview = $cache->getItem('hotel.'.$hotel->getId().'.random_review');
-        $randomReview->expiresAfter(60);
+        $reviews = $hotel->getReviews();
+        $reviewCount = count($reviews); 
+        $randomIndex = mt_rand(0,$reviewCount-1);
 
-        // If a Cache miss occurs
-        if(!$randomReview->isHit()) {
-            // Select all Review Ids belonging to Hotel
-            $reviews = $hotel->getReviews();
-            $reviewCount = count($reviews); 
-            $randomIndex = mt_rand(0,$reviewCount-1);
-            $randomReview->set($reviews[$randomIndex]);
-            $cache->save($randomReview);
-        }
-
-        return $randomReview->get();
+        return $reviews[$randomIndex];
     }
 
 //    /**
