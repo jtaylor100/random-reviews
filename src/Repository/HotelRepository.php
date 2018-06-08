@@ -33,7 +33,6 @@ class HotelRepository extends ServiceEntityRepository
     public function getRandomReview(Hotel $hotel) : ?Review
     {
         $cache = new FilesystemAdapter();
-        $cache->clear();
         $randomReview = $cache->getItem('hotel.'.$hotel->getId().'.random_review');
         $randomReview->expiresAfter(60);
 
