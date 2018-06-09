@@ -4,7 +4,7 @@
 namespace App\Service;
 
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 use App\Entity\Hotel;
 use App\Entity\Review;
 use App\Repository\HotelRepository;
@@ -12,10 +12,14 @@ use App\Repository\HotelRepository;
 class CachedReviewFetcher
 {
     private $hotelRespository;
+    private $cache;
 
-    public function __construct(HotelRepository $hotelRepository)
+    public function __construct(
+        HotelRepository $hotelRepository, 
+        AdapterInterface $cacheInterface)
     {
         $this->hotelRepository = $hotelRepository; 
+        $this->cache = $cacheInterface;
     }
 
     /**
@@ -25,18 +29,16 @@ class CachedReviewFetcher
      */
     public function getRandomReview(Hotel $hotel) : ?Review
     {
-        $cache = new FilesystemAdapter();
-
         // Attempt cache fetch
-        $randomReviewCache = $cache->getItem('hotel.'.$hotel->getId().'.random_review');
-        $randomReviewCache->expiresAfter(10);
+        $randomReviewCache = $this->cache->getItem('hotel.'.$hotel->getId().'.random_review');
+        $randomReviewCache->expiresAfter(60);
 
         // If a Cache miss occurs
         if(!$randomReviewCache->isHit()) {
             // Query database
             $randomReview = $this->hotelRepository->getRandomReview($hotel);
             $randomReviewCache->set($randomReview);
-            $cache->save($randomReviewCache);
+            $this->cache->save($randomReviewCache);
         }
 
         return $randomReviewCache->get();

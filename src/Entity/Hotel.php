@@ -73,6 +73,11 @@ class Hotel
         return $this->name;
     }
 
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
     public function setName(string $name): self
     {
         $this->name = $name;

@@ -21,6 +21,7 @@ class RandomReviewController extends Controller
 
         // Validate hotel Id and fetch Hotel entity
         $hotel = $hotelRepo->find($hotelId);
+
         if($hotel == null)
         {
             throw $this->createNotFoundException(
