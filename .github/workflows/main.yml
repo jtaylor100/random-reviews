@@ -23,4 +23,7 @@ jobs:
     - uses: actions/checkout@v2
 
     # Runs a single command using the runners shell
-    - uses: franzliedke/gh-action-php@0.2.0
+    - name: PHP Runner
+      uses: franzliedke/gh-action-php@0.2.0
+    
+    - run: php7.3 ./deptrac.phar --formatter-github-actions=true
