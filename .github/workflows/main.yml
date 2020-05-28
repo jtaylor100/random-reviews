@@ -24,4 +24,3 @@ jobs:
 
     # Runs a single command using the runners shell
     - uses: franzliedke/gh-action-php@0.2.0
-      runs: php7.4 ./deptrac.phar --formatter-github-actions=true
